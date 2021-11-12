@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        div {
+            font-size: 300%;
+            user-select: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app"></div>
+
+    <script>
+        // model
+        var points = 0;
+        var pointsPerClick = 1;
+        var upgradePoint = 0;
+        var maxUpgradePoint = 0;
+        var smileyIndex = 0;
+        var iconValue = 0;
+        
+        var icon1 = ':§:';
+
+
+        // controller
+        function doClick() {
+            points += pointsPerClick;
+            smileyIndex = getNextSmileyIndex(smileyIndex);
+            updateView();
+        }
+        function buyUpgrade() {
+            points += upgradePoint;
+            smileyIndex = getNextSmileyIndex(smileyIndex);
+            updateView();
+        }
+        function buyUpgrade1() {
+            points += maxUpgradePoint;
+            smileyIndex = getNextSmileyIndex(smileyIndex);
+            updateView();
+        }
+        function buyUpgrade2() {
+            points += iconValue;
+            smileyIndex = getNextSmileyIndex(smileyIndex);
+            updateView();
+        }
+
+
+
+        function buyUpgrade(upgradeCost) {
+            if (points < upgradeCost) return;
+            points -= upgradeCost;
+            pointsPerClick++;
+            updateView();
+        }
+        function buyUpgrade1(morePoints) {
+            if (points < morePoints) return;
+            points -= morePoints;
+            pointsPerClick+=10;
+            updateView();
+        }
+        
+        function buyUpgrade2(maxPoints) {
+            if (points < maxPoints) return;
+            points -= maxPoints;
+            pointsPerClick*=10;
+            updateView();
+        }
+        
+        function iconUpdate(iconCost) {
+            if (points < iconCost) return;
+            points -= iconCost;
+            icon1= ':€:'
+            updateView();
+        }
+
+        // view
+        updateView();
+        function updateView() {
+            var smiley = getSmiley(smileyIndex);
+            document.getElementById('app').innerHTML = `
+                <div id="image" onclick="doClick()">${smiley}</div>
+                <div id="pointsInfo">${points}</div>
+                <button onclick="buyUpgrade(10)">upgrade (10points)</button>
+                <button onclick="buyUpgrade1(100)">upgrade (100points)</button>
+                <button onclick="buyUpgrade2(10000)">upgrade (50000points)</button>
+                <button onclick="iconUpdate(1000)">iconupdate (1000points)</button>
+            `;
+        }
+
+        // hjelpefunksjoner
+        function getSmiley(aSmileyIndex) {
+            if(aSmileyIndex == 0) return ':£:';
+            if(aSmileyIndex == 1) return ':$:';
+            if(aSmileyIndex == 2) return icon1;
+            return '';
+        }
+
+        function getNextSmileyIndex(aSmileyIndex) {
+            const maxSmileyIndex = 2;
+            aSmileyIndex++;
+            if (aSmileyIndex > maxSmileyIndex) {
+                aSmileyIndex = 0;
+            }
+            return aSmileyIndex;
+        }
+
+
+    </script>
+</body>
+
+</html>
